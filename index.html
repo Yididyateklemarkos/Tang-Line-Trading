@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tang Line Trading — Trade, the way it was always meant to move.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;900&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14110F;
+    --ink-2:#1c1814;
+    --parchment:#F1E9DA;
+    --ochre:#C98A2E;
+    --ochre-soft:#e0ab5c;
+    --emerald:#1F6F4E;
+    --emerald-soft:#2e9169;
+    --rust:#A13D2B;
+    --muted:#8C8375;
+    --line: rgba(241,233,218,0.14);
+    --display: 'Frank Ruhl Libre', serif;
+    --body: 'Work Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--parchment);
+    font-family:var(--body);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  a{color:inherit; text-decoration:none;}
+  img{display:block; max-width:100%;}
+
+  ::selection{ background:var(--ochre); color:var(--ink); }
+
+  /* ---------- Tibeb pattern divider ---------- */
+  .tibeb{
+    width:100%;
+    height:14px;
+    display:block;
+  }
+  .tibeb svg{ width:100%; height:100%; display:block; }
+
+  /* ---------- Nav ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px 5vw;
+    transition: padding .35s ease, background .35s ease, backdrop-filter .35s ease;
+  }
+  header.scrolled{
+    padding:12px 5vw;
+    background:rgba(20,17,15,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .brand{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:1.35rem;
+    letter-spacing:0.01em;
+  }
+  .brand small{
+    display:block;
+    font-family:var(--mono);
+    font-weight:500;
+    font-size:0.6rem;
+    letter-spacing:0.2em;
+    color:var(--ochre);
+    margin-top:2px;
+  }
+  nav ul{
+    list-style:none;
+    display:flex;
+    gap:2.4rem;
+  }
+  nav a{
+    font-size:0.85rem;
+    font-weight:500;
+    letter-spacing:0.03em;
+    position:relative;
+    padding-bottom:4px;
+  }
+  nav a::after{
+    content:'';
+    position:absolute; left:0; bottom:0;
+    width:0; height:1px;
+    background:var(--ochre);
+    transition:width .3s ease;
+  }
+  nav a:hover::after, nav a.active::after{ width:100%; }
+  .nav-cta{
+    border:1px solid var(--ochre);
+    padding:9px 20px;
+    border-radius:2px;
+    font-family:var(--mono);
+    font-size:0.72rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    transition:background .3s ease, color .3s ease;
+  }
+  .nav-cta:hover{ background:var(--ochre); color:var(--ink); }
+  .nav-toggle{ display:none; }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    padding:0 5vw 8vw;
+    overflow:hidden;
+  }
+  .hero-bg{
+    position:absolute; inset:0;
+    background:url('https://images.unsplash.com/photo-1605745341112-85968b19335b?fm=jpg&q=80&w=2400&auto=format&fit=crop') center 55%/cover no-repeat;
+    transform: scale(1.08);
+    will-change: transform;
+  }
+  .hero-bg::after{
+    content:'';
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(20,17,15,0.55) 0%, rgba(20,17,15,0.55) 35%, var(--ink) 92%),
+      linear-gradient(90deg, rgba(20,17,15,0.75) 0%, rgba(20,17,15,0.15) 55%);
+  }
+  .hero-content{ position:relative; z-index:2; max-width:760px; }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:0.72rem;
+    letter-spacing:0.25em;
+    text-transform:uppercase;
+    color:var(--ochre-soft);
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:1.6rem;
+    opacity:0;
+    animation: fadeUp .9s ease forwards .2s;
+  }
+  .eyebrow::before{
+    content:''; width:34px; height:1px; background:var(--ochre-soft);
+  }
+  h1.hero-title{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:clamp(2.4rem, 6vw, 4.6rem);
+    line-height:1.06;
+    letter-spacing:-0.01em;
+    color:var(--parchment);
+    opacity:0;
+    animation: fadeUp 1s ease forwards .4s;
+  }
+  .hero-sub{
+    margin-top:1.6rem;
+    max-width:560px;
+    font-size:1.08rem;
+    color:rgba(241,233,218,0.82);
+    opacity:0;
+    animation: fadeUp 1s ease forwards .6s;
+  }
+  .hero-actions{
+    margin-top:2.4rem;
+    display:flex; gap:1rem; flex-wrap:wrap;
+    opacity:0;
+    animation: fadeUp 1s ease forwards .8s;
+  }
+  @keyframes fadeUp{ from{opacity:0; transform:translateY(24px);} to{opacity:1; transform:translateY(0);} }
+
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:14px 28px;
+    font-family:var(--mono);
+    font-size:0.76rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    border-radius:2px;
+    transition: transform .25s ease, background .25s ease, box-shadow .25s ease;
+  }
+  .btn-primary{ background:var(--ochre); color:var(--ink); font-weight:600; }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 10px 24px rgba(201,138,46,0.25); }
+  .btn-ghost{ border:1px solid rgba(241,233,218,0.35); color:var(--parchment); }
+  .btn-ghost:hover{ border-color:var(--parchment); background:rgba(241,233,218,0.06); }
+  .btn svg{ width:14px; height:14px; transition:transform .25s ease; }
+  .btn:hover svg{ transform:translateX(3px); }
+
+  .scroll-cue{
+    position:absolute; bottom:2.4rem; right:5vw; z-index:2;
+    display:flex; flex-direction:column; align-items:center; gap:10px;
+    font-family:var(--mono); font-size:0.62rem; letter-spacing:0.2em; color:var(--muted);
+    text-transform:uppercase;
+  }
+  .scroll-cue .line{ width:1px; height:42px; background:linear-gradient(var(--ochre), transparent); animation:pulseLine 2.2s ease-in-out infinite; }
+  @keyframes pulseLine{ 0%,100%{opacity:.4;} 50%{opacity:1;} }
+
+  /* ---------- Section shared ---------- */
+  section{ padding:8rem 5vw; position:relative; }
+  .section-head{ max-width:640px; margin-bottom:4rem; }
+  .kicker{
+    font-family:var(--mono); font-size:0.7rem; letter-spacing:0.22em; text-transform:uppercase;
+    color:var(--emerald-soft); margin-bottom:1rem; display:block;
+  }
+  h2.section-title{
+    font-family:var(--display); font-weight:700;
+    font-size:clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height:1.15;
+    color:var(--parchment);
+  }
+  .section-desc{ margin-top:1.2rem; color:rgba(241,233,218,0.72); font-size:1.02rem; max-width:560px; }
+
+  .reveal{ opacity:0; transform:translateY(30px); transition:opacity .8s ease, transform .8s ease; }
+  .reveal.in-view{ opacity:1; transform:translateY(0); }
+
+  /* ---------- Divisions ---------- */
+  .divisions{ background:var(--ink-2); }
+  .division-list{ display:flex; flex-direction:column; border-top:1px solid var(--line); }
+  .division{
+    border-bottom:1px solid var(--line);
+    position:relative;
+  }
+  .division-head{
+    display:flex; align-items:center; gap:2rem;
+    padding:2.4rem 0;
+    cursor:pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .division-index{
+    font-family:var(--mono); font-size:0.8rem; color:var(--ochre); flex:0 0 40px;
+  }
+  .division-name{
+    font-family:var(--display); font-weight:700;
+    font-size:clamp(1.3rem, 3vw, 2rem);
+    flex:1;
+    transition:color .3s ease, transform .3s ease;
+  }
+  .division-head:hover .division-name{ color:var(--ochre-soft); transform:translateX(6px); }
+  .division-toggle{
+    width:38px; height:38px; border-radius:50%;
+    border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    flex:0 0 38px;
+    transition: transform .4s ease, background .3s ease, border-color .3s ease;
+  }
+  .division.open .division-toggle{ transform:rotate(45deg); background:var(--ochre); border-color:var(--ochre); }
+  .division-toggle svg{ width:16px; height:16px; }
+  .division.open .division-toggle svg path{ stroke:var(--ink); }
+
+  .division-body{
+    max-height:0;
+    overflow:hidden;
+    transition: max-height .55s ease;
+  }
+  .division.open .division-body{ max-height:600px; }
+  .division-body-inner{
+    display:grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap:2.6rem;
+    padding-bottom:2.8rem;
+    align-items:start;
+  }
+  .division-text p{ color:rgba(241,233,218,0.78); font-size:1rem; }
+  .division-cta{ margin-top:1.8rem; }
+  .division-image{
+    border-radius:3px;
+    overflow:hidden;
+    aspect-ratio: 4/3;
+    background:#0d0b0a;
+  }
+  .division-image img{ width:100%; height:100%; object-fit:cover; filter:saturate(0.92) brightness(0.94); transition:transform .6s ease; }
+  .division:hover .division-image img{ transform:scale(1.04); }
+
+  /* ---------- Why / pillars ---------- */
+  .pillars{ display:grid; grid-template-columns:repeat(3,1fr); gap:2px; background:var(--line); border:1px solid var(--line); }
+  .pillar{
+    background:var(--ink);
+    padding:2.6rem 2rem;
+    transition:background .3s ease;
+  }
+  .pillar:hover{ background:var(--ink-2); }
+  .pillar-num{ font-family:var(--mono); color:var(--emerald-soft); font-size:0.78rem; letter-spacing:0.1em; }
+  .pillar h3{ font-family:var(--display); font-size:1.25rem; margin:1rem 0 0.8rem; font-weight:700; }
+  .pillar p{ color:rgba(241,233,218,0.68); font-size:0.94rem; }
+
+  /* ---------- Markets ---------- */
+  .markets-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
+  .market{
+    background:var(--ink-2);
+    padding:2.2rem 1.6rem;
+    position:relative;
+    overflow:hidden;
+    transition:background .35s ease;
+  }
+  .market::before{
+    content:'';
+    position:absolute; left:0; top:0; bottom:0; width:2px;
+    background:var(--ochre);
+    transform:scaleY(0); transform-origin:bottom;
+    transition:transform .4s ease;
+  }
+  .market:hover{ background:#221c17; }
+  .market:hover::before{ transform:scaleY(1); }
+  .market-tag{ font-family:var(--mono); font-size:0.65rem; letter-spacing:0.15em; color:var(--muted); text-transform:uppercase; }
+  .market h4{ font-family:var(--display); font-size:1.3rem; margin-top:0.6rem; font-weight:700; }
+  .market p{ margin-top:0.5rem; font-size:0.86rem; color:rgba(241,233,218,0.65); }
+
+  /* ---------- Final CTA ---------- */
+  .final-cta{
+    text-align:center;
+    padding:9rem 5vw;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(201,138,46,0.10), transparent 60%),
+      var(--ink);
+    border-top:1px solid var(--line);
+  }
+  .final-cta h2{
+    font-family:var(--display); font-weight:700;
+    font-size:clamp(2rem,5vw,3.2rem);
+    max-width:820px; margin:0 auto 1.6rem;
+  }
+  .final-cta p{ color:rgba(241,233,218,0.7); max-width:480px; margin:0 auto 2.4rem; }
+
+  /* ---------- Footer ---------- */
+  footer{
+    padding:4rem 5vw 2.4rem;
+    background:var(--ink-2);
+    border-top:1px solid var(--line);
+  }
+  .footer-grid{
+    display:grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap:2.4rem;
+    padding-bottom:3rem;
+  }
+  .footer-brand .brand{ margin-bottom:1rem; }
+  .footer-brand p{ color:rgba(241,233,218,0.6); font-size:0.88rem; max-width:280px; }
+  .footer-col h5{
+    font-family:var(--mono); font-size:0.68rem; letter-spacing:0.15em; text-transform:uppercase;
+    color:var(--ochre-soft); margin-bottom:1.1rem;
+  }
+  .footer-col ul{ list-style:none; }
+  .footer-col li{ margin-bottom:0.7rem; }
+  .footer-col a{ font-size:0.9rem; color:rgba(241,233,218,0.78); transition:color .25s ease; }
+  .footer-col a:hover{ color:var(--ochre-soft); }
+  .footer-bottom{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;
+    padding-top:2rem; border-top:1px solid var(--line);
+    font-family:var(--mono); font-size:0.7rem; color:var(--muted); letter-spacing:0.03em;
+  }
+  .group-tag{ color:var(--emerald-soft); }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 860px){
+    nav ul{ display:none; }
+    .nav-cta{ display:none; }
+    .division-body-inner{ grid-template-columns:1fr; }
+    .division-image{ order:-1; }
+    .pillars{ grid-template-columns:1fr; }
+    .markets-grid{ grid-template-columns:1fr 1fr; }
+    .footer-grid{ grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width: 520px){
+    .markets-grid{ grid-template-columns:1fr; }
+    .footer-grid{ grid-template-columns:1fr; }
+    section{ padding:5.5rem 6vw; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+    .hero-bg{ transform:none !important; }
+  }
+
+  :focus-visible{ outline:2px solid var(--ochre); outline-offset:3px; }
+</style>
+</head>
+<body>
+
+<!-- TIBEB PATTERN (reused as signature divider) -->
+<template id="tibeb-svg">
+  <svg viewBox="0 0 240 14" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <pattern id="tibebPattern" width="24" height="14" patternUnits="userSpaceOnUse">
+        <polygon points="0,14 12,0 24,14" fill="#C98A2E"/>
+        <polygon points="4,14 12,3 20,14" fill="#1F6F4E"/>
+        <polygon points="8,14 12,7 16,14" fill="#A13D2B"/>
+      </pattern>
+    </defs>
+    <rect width="240" height="14" fill="url(#tibebPattern)"/>
+  </svg>
+</template>
+
+<header id="siteHeader">
+  <a href="#" class="brand">TANG LINE TRADING<small>PART OF TANG LINE BUSINESS GROUP</small></a>
+  <nav>
+    <ul>
+      <li><a href="#divisions" data-nav>Divisions</a></li>
+      <li><a href="#why" data-nav>Why Tang Line</a></li>
+      <li><a href="#markets" data-nav>Markets</a></li>
+    </ul>
+  </nav>
+  <a class="nav-cta" href="contact.html">Contact</a>
+</header>
+
+<div class="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-content">
+    <span class="eyebrow">Tang Line Trading</span>
+    <h1 class="hero-title">Trade, the way it was always meant to move.</h1>
+    <p class="hero-sub">From vehicles to freight, we move goods and open markets between China and Ethiopia — built on direct relationships, not middlemen guesswork.</p>
+    <div class="hero-actions">
+      <a href="#divisions" class="btn btn-primary">Explore our services <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a href="contact.html" class="btn btn-ghost">Contact us</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>Scroll</span><span class="line"></span></div>
+</div>
+
+<div class="tibeb" data-tibeb></div>
+
+<!-- DIVISIONS -->
+<section id="divisions" class="divisions">
+  <div class="section-head reveal">
+    <span class="kicker">What we do</span>
+    <h2 class="section-title">Four ways we move trade forward</h2>
+    <p class="section-desc">Each division is run with its own dedicated focus — no scattered product catalog, just four things we do properly.</p>
+  </div>
+
+  <div class="division-list">
+
+    <div class="division reveal" data-division>
+      <div class="division-head" data-toggle>
+        <span class="division-index">01</span>
+        <h3 class="division-name">Vehicle Import</h3>
+        <span class="division-toggle"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#F1E9DA" stroke-width="2" stroke-linecap="round"/></svg></span>
+      </div>
+      <div class="division-body">
+        <div class="division-body-inner">
+          <div class="division-text">
+            <p>We import vehicles directly from China, including a growing range of electric vehicles, working straight with manufacturers at the source. That means competitive pricing without layers of markup, and genuine selection — if it's being made in China, we can bring it in.</p>
+            <p style="margin-top:1rem;">With a team on the ground in China and a team here in Ethiopia, every import moves with speed and accountability from factory to delivery. And every part of the process is fully legal and properly documented, so you're never left guessing about the paperwork behind your vehicle.</p>
+            <div class="division-cta">
+              <a href="contact.html?service=Vehicle%20Import" class="btn btn-primary">Order Now <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            </div>
+          </div>
+          <div class="division-image">
+            <img loading="lazy" src="https://images.unsplash.com/photo-1567409378873-888d6fa7debc?fm=jpg&q=80&w=1200&auto=format&fit=crop" alt="Electric vehicle imported through Tang Line Trading">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="division reveal" data-division>
+      <div class="division-head" data-toggle>
+        <span class="division-index">02</span>
+        <h3 class="division-name">Distribution</h3>
+        <span class="division-toggle"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#F1E9DA" stroke-width="2" stroke-linecap="round"/></svg></span>
+      </div>
+      <div class="division-body">
+        <div class="division-body-inner">
+          <div class="division-text">
+            <p>If you're an importer or manufacturer sitting on stock, we sell it for you — across the country, not just in one city. Your goods are handled with the same care and accountability we'd expect for our own.</p>
+            <p style="margin-top:1rem;">Because we work on a wholesale basis rather than holding inventory ourselves, there's no upfront risk or storage burden on either side. It's market reach you'd otherwise have to build for yourself, without the overhead of building it.</p>
+            <div class="division-cta">
+              <a href="contact.html?service=Distribution" class="btn btn-primary">Book This Service <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            </div>
+          </div>
+          <div class="division-image">
+            <img loading="lazy" src="https://images.unsplash.com/photo-1587293852726-70cdb56c2866?fm=jpg&q=80&w=1200&auto=format&fit=crop" alt="Warehouse stock ready for nationwide distribution">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="division reveal" data-division>
+      <div class="division-head" data-toggle>
+        <span class="division-index">03</span>
+        <h3 class="division-name">Logistics &amp; Shipping</h3>
+        <span class="division-toggle"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#F1E9DA" stroke-width="2" stroke-linecap="round"/></svg></span>
+      </div>
+      <div class="division-body">
+        <div class="division-body-inner">
+          <div class="division-text">
+            <p>We move freight from China to Ethiopia, then take it the rest of the way ourselves — with our own trucking network handling distribution once goods land.</p>
+            <p style="margin-top:1rem;">One point of contact, one accountable team, covering the full route instead of handing your shipment off between disconnected providers. That's what reliability actually looks like in freight: nothing gets lost between the parts of the journey nobody else is watching.</p>
+            <div class="division-cta">
+              <a href="contact.html?service=Logistics%20%26%20Shipping" class="btn btn-primary">Use Our Services <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            </div>
+          </div>
+          <div class="division-image">
+            <img loading="lazy" src="https://images.unsplash.com/photo-1616432043562-3671ea2e5242?fm=jpg&q=80&w=1200&auto=format&fit=crop" alt="Freight truck used in Tang Line logistics network">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="division reveal" data-division>
+      <div class="division-head" data-toggle>
+        <span class="division-index">04</span>
+        <h3 class="division-name">Export Intermediary</h3>
+        <span class="division-toggle"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#F1E9DA" stroke-width="2" stroke-linecap="round"/></svg></span>
+      </div>
+      <div class="division-body">
+        <div class="division-body-inner">
+          <div class="division-text">
+            <p>We connect Ethiopian exporters — in coffee, agricultural products, and textiles and leather — with the buyers who want them, and connect buyers with the materials and machinery they're looking for on the Ethiopian side.</p>
+            <p style="margin-top:1rem;">We're not the exporter of record; we're the trusted link that makes sure the right parties actually find each other, with the professionalism and follow-through a cross-border deal needs.</p>
+            <div class="division-cta">
+              <a href="contact.html?service=Export%20Intermediary" class="btn btn-primary">Partner With Us <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            </div>
+          </div>
+          <div class="division-image">
+            <img loading="lazy" src="https://images.unsplash.com/photo-1690983325192-a4c13c2e331d?fm=jpg&q=80&w=1200&auto=format&fit=crop" alt="Ethiopian coffee sack, part of the export intermediary division">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="tibeb" data-tibeb></div>
+
+<!-- WHY TANG LINE -->
+<section id="why">
+  <div class="section-head reveal">
+    <span class="kicker">Why Tang Line</span>
+    <h2 class="section-title">Built on direct relationships</h2>
+    <p class="section-desc">No layers of unnecessary middlemen — just a company with people on both ends of the route.</p>
+  </div>
+  <div class="pillars reveal">
+    <div class="pillar">
+      <span class="pillar-num">01 — REACH</span>
+      <h3>China &amp; Ethiopia, directly</h3>
+      <p>A team on the ground in China and a team here in Ethiopia, so every deal is handled by people who understand both sides of it.</p>
+    </div>
+    <div class="pillar">
+      <span class="pillar-num">02 — LEGAL</span>
+      <h3>Fully documented, always</h3>
+      <p>Every import, shipment, and deal is handled through proper legal channels and paperwork — nothing left to guesswork.</p>
+    </div>
+    <div class="pillar">
+      <span class="pillar-num">03 — FOCUS</span>
+      <h3>Four services, done properly</h3>
+      <p>Vehicles, Distribution, Logistics, and Export — one company built around doing a few things well, not everything at once.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MARKETS -->
+<section id="markets">
+  <div class="section-head reveal">
+    <span class="kicker">Where we operate</span>
+    <h2 class="section-title">Markets we move between</h2>
+  </div>
+  <div class="markets-grid reveal">
+    <div class="market"><span class="market-tag">Primary</span><h4>Ethiopia</h4><p>Our home market and the center of gravity for every division.</p></div>
+    <div class="market"><span class="market-tag">Sourcing</span><h4>China</h4><p>Where our vehicles, freight, and manufacturing relationships originate.</p></div>
+    <div class="market"><span class="market-tag">Secondary</span><h4>Georgia</h4><p>An active secondary market for trade flow.</p></div>
+    <div class="market"><span class="market-tag">Secondary</span><h4>UAE</h4><p>A regional hub within our secondary market network.</p></div>
+    <div class="market"><span class="market-tag">Secondary</span><h4>Kazakhstan</h4><p>Part of our expanding Central Asian reach.</p></div>
+    <div class="market"><span class="market-tag">Secondary</span><h4>Tajikistan &amp; Russia</h4><p>Additional markets within our trade network.</p></div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<div class="final-cta reveal">
+  <span class="kicker" style="justify-content:center; display:flex;">Ready when you are</span>
+  <h2>Every service, handled directly — no forms disappearing into an inbox.</h2>
+  <p>Reach out and a member of our team will follow up personally.</p>
+  <a href="contact.html" class="btn btn-primary">Contact Tang Line <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+</div>
+
+<div class="tibeb" data-tibeb></div>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="brand">TANG LINE TRADING</a>
+      <p>Vehicle Import, Distribution, Logistics &amp; Shipping, and Export Intermediary services between China, Ethiopia, and beyond.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Divisions</h5>
+      <ul>
+        <li><a href="contact.html?service=Vehicle%20Import">Vehicle Import</a></li>
+        <li><a href="contact.html?service=Distribution">Distribution</a></li>
+        <li><a href="contact.html?service=Logistics%20%26%20Shipping">Logistics &amp; Shipping</a></li>
+        <li><a href="contact.html?service=Export%20Intermediary">Export Intermediary</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <ul>
+        <li><a href="#why">Why Tang Line</a></li>
+        <li><a href="#markets">Markets</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Group</h5>
+      <ul>
+        <li><a href="#" class="group-tag">Tang Line Business Group ↗</a></li>
+        <li><a href="#" class="group-tag">EastLink Education ↗</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Tang Line Trading — a company of <span class="group-tag">Tang Line Business Group</span></span>
+    <span>Ethiopia · China · Georgia · UAE · Kazakhstan · Tajikistan · Russia</span>
+  </div>
+</footer>
+
+<script>
+  // Inject tibeb SVG pattern into every divider
+  const tibebTemplate = document.getElementById('tibeb-svg').innerHTML;
+  document.querySelectorAll('[data-tibeb]').forEach(el => el.innerHTML = tibebTemplate);
+
+  // Header shrink on scroll
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive:true });
+
+  // Hero parallax
+  const heroBg = document.getElementById('heroBg');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y < window.innerHeight) {
+      heroBg.style.transform = `scale(1.08) translateY(${y * 0.15}px)`;
+    }
+  }, { passive:true });
+
+  // Scroll-spy nav
+  const navLinks = document.querySelectorAll('nav a[data-nav]');
+  const sections = ['divisions','why','markets'].map(id => document.getElementById(id));
+  const spyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const match = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+        if (match) match.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -50% 0px' });
+  sections.forEach(s => s && spyObserver.observe(s));
+
+  // Reveal on scroll
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // Division accordion
+  document.querySelectorAll('[data-toggle]').forEach(head => {
+    head.addEventListener('click', () => {
+      const division = head.closest('[data-division]');
+      const wasOpen = division.classList.contains('open');
+      document.querySelectorAll('[data-division]').forEach(d => d.classList.remove('open'));
+      if (!wasOpen) division.classList.add('open');
+    });
+  });
+  // Open first division by default
+  document.querySelector('[data-division]').classList.add('open');
+</script>
+
+</body>
+</html>

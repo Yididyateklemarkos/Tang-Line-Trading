@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contact — Tang Line Trading</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;900&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14110F;
+    --ink-2:#1c1814;
+    --parchment:#F1E9DA;
+    --ochre:#C98A2E;
+    --ochre-soft:#e0ab5c;
+    --emerald:#1F6F4E;
+    --emerald-soft:#2e9169;
+    --rust:#A13D2B;
+    --muted:#8C8375;
+    --line: rgba(241,233,218,0.14);
+    --display: 'Frank Ruhl Libre', serif;
+    --body: 'Work Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--ink); color:var(--parchment); font-family:var(--body); line-height:1.6;
+    min-height:100vh;
+  }
+  a{color:inherit; text-decoration:none;}
+  ::selection{ background:var(--ochre); color:var(--ink); }
+
+  .tibeb{ width:100%; height:14px; }
+  .tibeb svg{ width:100%; height:100%; display:block; }
+
+  header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px 5vw;
+  }
+  .brand{ font-family:var(--display); font-weight:700; font-size:1.35rem; }
+  .brand small{ display:block; font-family:var(--mono); font-weight:500; font-size:0.6rem; letter-spacing:0.2em; color:var(--ochre); margin-top:2px; }
+  .back-link{
+    font-family:var(--mono); font-size:0.72rem; letter-spacing:0.08em; text-transform:uppercase;
+    display:flex; align-items:center; gap:8px; color:rgba(241,233,218,0.7);
+  }
+  .back-link:hover{ color:var(--ochre-soft); }
+  .back-link svg{ width:14px; height:14px; }
+
+  main{
+    max-width:960px; margin:0 auto; padding:5rem 6vw 7rem;
+  }
+  .service-tag{
+    display:inline-flex; align-items:center; gap:10px;
+    font-family:var(--mono); font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--emerald-soft);
+    border:1px solid rgba(46,145,105,0.35);
+    padding:8px 16px; border-radius:2px; margin-bottom:2rem;
+    opacity:0; animation: fadeUp .8s ease forwards .1s;
+  }
+  h1{
+    font-family:var(--display); font-weight:700;
+    font-size:clamp(2rem, 5vw, 3.2rem); line-height:1.1;
+    max-width:680px;
+    opacity:0; animation: fadeUp .9s ease forwards .25s;
+  }
+  .sub{
+    margin-top:1.4rem; max-width:540px; color:rgba(241,233,218,0.75); font-size:1.05rem;
+    opacity:0; animation: fadeUp .9s ease forwards .4s;
+  }
+  @keyframes fadeUp{ from{opacity:0; transform:translateY(22px);} to{opacity:1; transform:translateY(0);} }
+
+  .contact-grid{
+    margin-top:4rem;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:1.5rem;
+  }
+  .contact-card{
+    background:var(--ink-2);
+    border:1px solid var(--line);
+    padding:2.6rem 2.2rem;
+    border-radius:3px;
+    position:relative;
+    overflow:hidden;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    transition: transform .3s ease, border-color .3s ease;
+    opacity:0; animation: fadeUp .9s ease forwards .55s;
+  }
+  .contact-card:nth-child(2){ animation-delay:.7s; }
+  .contact-card:hover{ transform:translateY(-4px); border-color:var(--ochre); }
+  .contact-card::before{
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg, var(--ochre), var(--emerald), var(--rust));
+    transform:scaleX(0); transform-origin:left; transition:transform .4s ease;
+  }
+  .contact-card:hover::before{ transform:scaleX(1); }
+  .contact-icon{
+    width:46px; height:46px; border-radius:50%;
+    background:rgba(201,138,46,0.12);
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto 1.6rem;
+  }
+  .contact-icon svg{ width:20px; height:20px; }
+  .contact-card h3{ font-family:var(--display); font-size:1.4rem; margin-bottom:0.6rem; }
+  .contact-card p{ color:rgba(241,233,218,0.65); font-size:0.92rem; margin-bottom:1.6rem; max-width:320px; }
+  .contact-value{
+    font-family:var(--mono); font-size:1.15rem; color:var(--ochre-soft);
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    padding-bottom:4px; border-bottom:1px solid transparent;
+    transition:border-color .25s ease;
+    word-break:break-all;
+  }
+  .contact-card:hover .contact-value{ border-color:var(--ochre-soft); }
+
+  .note{
+    margin-top:3rem;
+    font-family:var(--mono); font-size:0.78rem; color:var(--muted);
+    border-left:2px solid var(--emerald); padding-left:1.2rem;
+    max-width:560px;
+    opacity:0; animation: fadeUp .9s ease forwards .9s;
+  }
+
+  footer{
+    text-align:center; padding:2.4rem 5vw; border-top:1px solid var(--line);
+    font-family:var(--mono); font-size:0.7rem; color:var(--muted);
+  }
+
+  @media (max-width:700px){
+    .contact-grid{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="brand">TANG LINE TRADING<small>PART OF TANG LINE BUSINESS GROUP</small></a>
+  <a href="index.html" class="back-link"><svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Back to site</a>
+</header>
+
+<div class="tibeb" id="tibebTop"></div>
+
+<main>
+  <span class="service-tag" id="serviceTag" style="display:none;"></span>
+  <h1 id="pageTitle">Get in Touch</h1>
+  <p class="sub" id="pageSub">Every Tang Line service is handled directly — no forms disappearing into an inbox. Reach us by phone or email and a member of our team will follow up personally.</p>
+
+  <div class="contact-grid">
+    <div class="contact-card">
+      <div class="contact-icon">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="#C98A2E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h3>Call Us</h3>
+      <p>Speak directly with our team about your inquiry.</p>
+      <a href="tel:+251900000000" class="contact-value">+251 90 000 0000 ↗</a>
+    </div>
+    <div class="contact-card">
+      <div class="contact-icon">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" stroke="#C98A2E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="m22 6-10 7L2 6" stroke="#C98A2E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h3>Email Us</h3>
+      <p>Send details about your inquiry and we'll respond promptly.</p>
+      <a href="mailto:info@tanglinetrading.com" class="contact-value">info@tanglinetrading.com ↗</a>
+    </div>
+  </div>
+
+  <p class="note" id="noteLine">Replace the phone number and email above with Tang Line's real contact details before publishing.</p>
+</main>
+
+<div class="tibeb" id="tibebBottom"></div>
+
+<footer>© 2026 Tang Line Trading — a company of Tang Line Business Group</footer>
+
+<script>
+  const tibeb = `<svg viewBox="0 0 240 14" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <defs><pattern id="tp" width="24" height="14" patternUnits="userSpaceOnUse">
+      <polygon points="0,14 12,0 24,14" fill="#C98A2E"/>
+      <polygon points="4,14 12,3 20,14" fill="#1F6F4E"/>
+      <polygon points="8,14 12,7 16,14" fill="#A13D2B"/>
+    </pattern></defs>
+    <rect width="240" height="14" fill="url(#tp)"/></svg>`;
+  document.getElementById('tibebTop').innerHTML = tibeb;
+  document.getElementById('tibebBottom').innerHTML = tibeb;
+
+  // Adapt to ?service= query param
+  const params = new URLSearchParams(window.location.search);
+  const service = params.get('service');
+  if (service) {
+    const tag = document.getElementById('serviceTag');
+    tag.textContent = `Inquiring about: ${service}`;
+    tag.style.display = 'inline-flex';
+    document.getElementById('pageTitle').textContent = `Let's talk about ${service}`;
+    document.getElementById('pageSub').textContent = `Reach out by phone or email and a member of our team will follow up personally about ${service}.`;
+  }
+</script>
+
+</body>
+</html>
